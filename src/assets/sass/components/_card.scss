@@ -1,0 +1,44 @@
+.card {
+  border: 1px solid #fff;
+  cursor: pointer;
+  height: 200px;
+  padding: 1rem;
+  position: relative;
+  width: 280px;
+  transition: color .2s;
+
+  p {
+    background-color: rgba(255, 255, 255, .95);
+    border-radius: 0 0 0 50%;
+    padding: .2rem .3rem .4rem .6rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  &:hover {
+    color: #fff;
+
+    p {
+      background-color: #fff;
+    }
+  }
+}
+
+.bought {
+  background-color: #06d6a0;
+  transition: background-color .2s ease-out;
+
+  p {
+    color: #06d6a0;
+  }
+ }
+
+ .needed {
+   background-color: #ef476f;
+   transition: background-color .2s ease-out;
+
+   p {
+    color: #ef476f;
+   }
+ }

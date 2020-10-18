@@ -1,0 +1,23 @@
+.menu {
+  background-color: transparent;
+  height: 100px;
+
+  &-list {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+
+    &--link {
+      align-self: center;
+      cursor: pointer;
+      font-size: 2.2rem;
+      list-style-type: none;
+      padding: 1rem 2rem;
+      transition: all .2s;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+}

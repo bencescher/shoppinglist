@@ -1,24 +1,9 @@
-# shoppin
+# Shoppin
 
-## Project setup
-```
-npm install
-```
+A minimalist shopping list application enabling to manage items quick and easily.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Stack
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Framework: Vue.js with Vuex and VueCLI
+- Style: CSS3 with Sass
+- Database: Firestore
