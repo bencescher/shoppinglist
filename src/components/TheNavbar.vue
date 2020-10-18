@@ -24,19 +24,9 @@
 
 <script>
 export default {
-  computed: {
-    listItems: {
-      get() {
-        return this.$store.getters.shoppingList;
-      },
-      set(filteredList) {
-        this.$store.dispatch('updateItems', filteredList);
-      },
-    },
-  },
   methods: {
     archiveItems() {
-      this.listItems = this.listItems.filter((item) => item.bought === false);
+      this.$store.dispatch('archiveItems');
     },
   },
 };

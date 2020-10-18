@@ -52,16 +52,6 @@ export default {
 
   created() {
     this.$store.dispatch('initItems');
-    // order items by shop name alphabetically ascending
-    this.listItems.sort((a, b) => {
-      if (a.shop < b.shop) {
-        return -1;
-      }
-      if (b.shop > a.shop) {
-        return 1;
-      }
-      return 0;
-    });
   },
 
   methods: {
