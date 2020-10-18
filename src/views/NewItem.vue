@@ -1,29 +1,72 @@
 <template>
-  <div class="container">
+  <div class="new-container">
     <h1>Add an item</h1>
-    <form>
+    <form @submit.prevent="saveItem()" class="form">
       <div class="form--group">
-        <label for="itemname">Name</label>
-        <input type="text" name="itemname" id="itemname">
+        <label class="form--label" for="itemname">What?</label>
+        <input
+          class="form--input"
+          id="itemname"
+          name="itemname"
+          placeholder="Item name"
+          type="text"
+          v-model="newItem.name"
+        >
       </div>
       <div class="form--group">
-        <label for="itemquantity">Quantity</label>
-        <input type="number" name="itemquantity" id="itemquantity">
+        <label class="form--label" for="itemquantity">How many?</label>
+        <input
+          class="form--input"
+          id="itemquantity"
+          name="itemquantity"
+          placeholder="Item quantity"
+          type="number"
+          v-model="newItem.quantity"
+        >
       </div>
       <div class="form--group">
-        <label for="shopname">Name</label>
-        <select name="shopname" id="shopname">
+        <label class="form--label form--label--select" for="shopname">Where?</label>
+        <select
+          class="form--select"
+          name="shopname"
+          id="shopname"
+          v-model="newItem.shop"
+        >
+          <option value="" disabled selected>Shop name</option>
           <option value="Aldi">Aldi</option>
-          <option value="Aldi">Auchan</option>
-          <option value="Aldi">Ikea</option>
-          <option value="Aldi">Lidl</option>
-          <option value="Aldi">Rossmann</option>
-          <option value="Aldi">Tesco</option>
+          <option value="">Auchan</option>
+          <option value="Ikea">Ikea</option>
+          <option value="Lidl">Lidl</option>
+          <option value="Rossmann">Rossmann</option>
+          <option value="Tesco">Tesco</option>
         </select>
       </div>
       <div class="form--group">
-        <button class="btn btn-save">Save</button>
+        <button class="btn btn--save" type="submit">Save</button>
       </div>
     </form>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      newItem: {
+        name: '',
+        quantity: '',
+        shop: '',
+      },
+    };
+  },
+
+  methods: {
+    saveItem() {
+      this.$store.dispatch('addItem', this.newItem)
+        .then(() => {
+          this.$router.push('/');
+        });
+    },
+  },
+};
+</script>

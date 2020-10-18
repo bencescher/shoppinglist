@@ -1,14 +1,12 @@
-.list-container {
+.new-container {
   text-align: center;
 
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
-}
 
-.feedback {
-  p {
-    font-style: italic;
+  h1 {
+    text-transform: uppercase;
   }
 }

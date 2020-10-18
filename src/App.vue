@@ -3,7 +3,9 @@
     <header id="nav">
       <app-navbar></app-navbar>
     </header>
-    <router-view/>
+    <transition name="slide" mode="out-in">
+      <router-view/>
+    </transition>
   </div>
 </template>
 

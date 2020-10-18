@@ -9,6 +9,9 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    CREATE_ITEM(state, newItem) {
+      state.itemList.push(newItem);
+    },
     SET_ITEMS(state) {
       state.itemList = [
         {
@@ -79,6 +82,9 @@ export default new Vuex.Store({
   },
 
   actions: {
+    addItem: ({ commit }, newItem) => {
+      commit('CREATE_ITEM', newItem);
+    },
     initItems: ({ commit }) => {
       commit('SET_ITEMS');
     },

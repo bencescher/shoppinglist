@@ -1,10 +1,13 @@
 // global variables
 @import './abstracts/variables';
 // general settings
+@import './base/animations';
 @import './base/base';
 // reusable components
 @import './components/buttons';
 @import './components/card';
+@import './components/form';
 @import './components/navbar';
 // view-specific layouts
 @import './views/list';
+@import './views/new';
