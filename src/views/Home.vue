@@ -42,11 +42,17 @@ export default {
     changeflag() {
       this.$store.dispatch('updateItems', this.listItems);
     },
+    quantityChangeFlag() {
+      this.$store.dispatch('initItems');
+    },
   },
 
   computed: {
     listItems() {
       return this.$store.getters.shoppingList;
+    },
+    quantityChangeFlag() {
+      return this.$store.getters.quantityChangeFlag;
     },
   },
 

@@ -7,10 +7,68 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     itemList: [],
+    quantityChangeFlag: 0,
   },
 
   mutations: {
-    createItem(state, newItem) {
+    createItem(state, formattedItem) {
+      // add item to database
+      db.collection('shoppinglist')
+        .add(formattedItem);
+      // add item to state
+      state.itemList.push(formattedItem);
+    },
+
+    setItems(state, itemList) {
+      state.itemList = itemList;
+    },
+
+    incrementQuantity(state, payload) {
+      const { existingId } = payload;
+      const { newQuantity } = payload;
+
+      // update quantity of the matching item adding the new quantity
+      db.collection('shoppinglist')
+        .doc(existingId)
+        .update({
+          quantity: newQuantity,
+        })
+        .then(() => {
+          for (let i = 0; i < state.itemList.length; i += 1) {
+            if (state.itemList[i].id === existingId) {
+              state.itemList[i].quantity = newQuantity;
+            }
+          }
+          state.quantityChangeFlag = Math.random();
+        });
+    },
+
+    updateItems(state, updatedList) {
+      // update 'bought' flag in database for the clicked item
+      updatedList.forEach((updatedItem) => {
+        db.collection('shoppinglist')
+          .doc(updatedItem.id)
+          .update({
+            bought: updatedItem.bought,
+          })
+          .then(() => {
+            state.itemList = updatedList;
+          });
+      });
+    },
+
+    deleteItems(state, itemId) {
+      // remove items from database
+      db.collection('shoppinglist')
+        .doc(itemId)
+        .delete();
+      // remove items also from state
+      state.itemList = state.itemList.filter((item) => item.bought === false);
+    },
+  },
+
+  actions: {
+    addItem: ({ commit, state }, newItem) => {
       // add a new item to database or increment the quantity of an existing one
       let existingId = '';
 
@@ -34,14 +92,11 @@ export default new Vuex.Store({
           shop: newItem.shop,
         };
 
-        // add item to database
-        db.collection('shoppinglist')
-          .add(formattedItem);
-        // add item to state
-        state.itemList.push(formattedItem);
+        commit('createItem', formattedItem);
       } else {
         // if a matching item exist in the database, increment its quantity
         let previousQuantity = 0;
+        let newQuantity = 0;
 
         db.collection('shoppinglist').get()
           .then((shoppinglist) => {
@@ -53,21 +108,21 @@ export default new Vuex.Store({
                 previousQuantity = itemData.quantity;
               }
             });
+            newQuantity = parseInt(previousQuantity, 10) + parseInt(newItem.quantity, 10);
 
-            // update quantity of the matching item adding the new quantity
-            db.collection('shoppinglist')
-              .doc(existingId)
-              .update({
-                quantity: parseInt(previousQuantity, 10) + parseInt(newItem.quantity, 10),
-              });
+            const payload = {
+              existingId,
+              newQuantity,
+            };
+
+            commit('incrementQuantity', payload);
           });
       }
     },
 
-    setItems(state) {
+    initItems: ({ commit }) => {
       // initialize shopping list from databse
-      const rawList = [];
-      state.itemList = [];
+      const itemList = [];
 
       db.collection('shoppinglist').get()
         .then((shoppinglist) => {
@@ -76,10 +131,10 @@ export default new Vuex.Store({
 
             // add document id for each item to have a unique key
             itemData.id = item.id;
-            rawList.push(itemData);
+            itemList.push(itemData);
           });
           // order items by shop name alphabetically ascending
-          rawList.sort((a, b) => {
+          itemList.sort((a, b) => {
             if (a.shop < b.shop) {
               return -1;
             }
@@ -88,47 +143,8 @@ export default new Vuex.Store({
             }
             return 0;
           });
-          state.itemList = rawList;
+          commit('setItems', itemList);
         });
-    },
-
-    updateItems(state, updatedList) {
-      // update 'bought' flag in database for the clicked item
-      updatedList.forEach((updatedItem) => {
-        db.collection('shoppinglist')
-          .doc(updatedItem.id)
-          .update({
-            bought: updatedItem.bought,
-          });
-      });
-    },
-
-    deleteItems(state) {
-      // remove items from database where 'bought' flag is true
-      db.collection('shoppinglist').get()
-        .then((shoppinglist) => {
-          shoppinglist.forEach((item) => {
-            const itemData = item.data();
-
-            if (itemData.bought) {
-              db.collection('shoppinglist')
-                .doc(item.id)
-                .delete();
-            }
-          });
-        });
-      // remove items also from state
-      state.itemList = state.itemList.filter((item) => item.bought === false);
-    },
-  },
-
-  actions: {
-    addItem: ({ commit }, newItem) => {
-      commit('createItem', newItem);
-    },
-
-    initItems: ({ commit }) => {
-      commit('setItems');
     },
 
     updateItems: ({ commit }, updatedList) => {
@@ -136,11 +152,23 @@ export default new Vuex.Store({
     },
 
     archiveItems: ({ commit }) => {
-      commit('deleteItems');
+      // remove items from database where 'bought' flag is true
+      db.collection('shoppinglist').get()
+        .then((shoppinglist) => {
+          shoppinglist.forEach((item) => {
+            const itemData = item.data();
+
+            if (itemData.bought) {
+              commit('deleteItems', item.id);
+            }
+          });
+        });
     },
   },
 
   getters: {
     shoppingList: (state) => state.itemList,
+
+    quantityChangeFlag: (state) => state.quantityChangeFlag,
   },
 });
