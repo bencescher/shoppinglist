@@ -56,10 +56,12 @@ export default {
 
   methods: {
     setChangeflag() {
+      // change indicator for 'bought' attribute change of item object
       this.changeflag = Math.random(0, 1);
     },
 
     setClass(flag) {
+      // change item card style class depending on 'bought' flag
       let returnClass = '';
 
       if (flag) {

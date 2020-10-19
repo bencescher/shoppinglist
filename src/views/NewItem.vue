@@ -1,9 +1,15 @@
 <template>
   <div class="new-container">
     <h1>Add an item</h1>
-    <form @submit.prevent="saveItem()" class="form">
+    <form
+     @submit.prevent="saveItem()"
+     class="form"
+    >
       <div class="form--group">
-        <label class="form--label" for="itemname">What?</label>
+        <label
+         class="form--label"
+         for="itemname"
+        >What?</label>
         <input
           class="form--input"
           id="itemname"
@@ -16,7 +22,10 @@
         >
       </div>
       <div class="form--group">
-        <label class="form--label" for="itemquantity">How many?</label>
+        <label
+         class="form--label"
+         for="itemquantity"
+        >How many?</label>
         <input
           class="form--input"
           id="itemquantity"
@@ -30,7 +39,10 @@
         >
       </div>
       <div class="form--group">
-        <label class="form--label form--label--select" for="shopname">Where?</label>
+        <label
+          class="form--label form--label--select"
+          for="shopname"
+        >Where?</label>
         <select
           class="form--select"
           id="shopname"
@@ -38,7 +50,11 @@
           required
           v-model="newItem.shop"
         >
-          <option value="" disabled selected>Shop name</option>
+          <option
+            value=""
+            disabled
+            selected
+          >Shop name</option>
           <option value="Aldi">Aldi</option>
           <option value="Auchan">Auchan</option>
           <option value="Ikea">Ikea</option>
@@ -48,7 +64,10 @@
         </select>
       </div>
       <div class="form--group">
-        <button class="btn btn--save" type="submit">Save</button>
+        <button
+          class="btn btn--save"
+          type="submit"
+        >Save</button>
       </div>
     </form>
   </div>
@@ -70,6 +89,7 @@ export default {
     saveItem() {
       this.$store.dispatch('addItem', this.newItem)
         .then(() => {
+          // reroute to shopping list view after saving the new item
           this.$router.push('/');
         });
     },
